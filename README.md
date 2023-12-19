@@ -47,11 +47,31 @@ You can directly call a particular template as per the requirement. for example:
   # passing the parameters
   - template: dotNetUnitTest.yml
     parameters:
-      dotNetTestProjectFilePath: '${{ parameters.dotNetTestProjectFilePath }}' 
-      dotNetTestArguements: '${{ parameters.dotNetTestArguements }}'
-      publishTestResults: '${{ parameters.publishTestResults }}'
-      testRunTitle: '${{ parameters.testRunTitle }}'
-      workingDirectory: '${{ parameters.workingDirectory }}'                 
+    displayName: Execute Unit Tests using VSTest
+      testSelector: '${{ parameters.testSelector }}'
+      testAssemblyVer2: '${{ parameters.testAssemblyVer2 }}'
+      searchFolder: '${{ parameters.searchFolder }}'
+      testFiltercriteria: '${{ parameters.testFiltercriteria }}'
+      ${{ if parameters.resultsFolder }}:
+        resultsFolder: '${{ parameters.resultsFolder }}'
+      runInParallel: '${{ parameters.runInParallel }}'
+      runTestsInIsolation: '${{ parameters.runTestsInIsolation }}'
+      codeCoverageEnabled: '${{ parameters.codeCoverageEnabled }}'
+      otherConsoleOptions: '${{ parameters.otherConsoleOptions }}'
+      vstestLocationMethod: '${{ parameters.vstestLocationMethod }}'
+      ${{ if eq( parameters.vstestLocationMethod, 'version') }}:
+        vsTestVersion: '${{ parameters.vsTestVersion }}'
+      ${{ if eq( parameters.vstestLocationMethod, 'location') }}:
+        vstestLocation: '${{ parameters.vstestLocation }}'        
+      runOnlyImpactedTests: '${{ parameters.runOnlyImpactedTests }}'
+      uiTests: '${{ parameters.uiTests }}'
+      runSettingsFile: '${{ parameters.runSettingsFile }}'
+      overrideTestrunParameters: '${{ parameters.overrideTestrunParameters }}'
+      pathtoCustomTestAdapters: '${{ parameters.pathtoCustomTestAdapters }}'
+      failOnMinTestsNotRun: '${{ parameters.failOnMinTestsNotRun }}'
+      diagnosticsEnabled: '${{ parameters.diagnosticsEnabled }}'
+      rerunFailedTests: '${{ parameters.rerunFailedTests }}'
+      publishRunAttachments: '${{ parameters.publishRunAttachments }}'                
 
   ``` 
   
