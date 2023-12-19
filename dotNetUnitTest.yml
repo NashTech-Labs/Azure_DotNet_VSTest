@@ -1,0 +1,131 @@
+#This template is used to execute the test cases
+#In order to use this template in pipeline, following pipeline variables must be set:
+#- testAssemblyVer2: Required. The test assemblies to be used to execute the test cases.
+#- searchFolder: Required. The folder which contains the test assemblies.
+#- testFiltercriteria: Required. The test filter criteria
+
+parameters:
+
+- name: testRunner       
+  type: string
+  default: ''
+  
+- name: testResultsFiles     
+  type: string
+  default: '**/*.trx'
+
+- name: testSelector
+  type: string
+  default: 'testAssemblies'
+
+- name: testAssemblyVer2
+  type: string
+  default: ''
+
+- name: searchFolder
+  type: string
+  default: ''
+  
+- name: testFiltercriteria
+  type: string
+  default: ''
+
+- name: resultsFolder
+  type: string
+  default: ''
+
+- name: runInParallel
+  type: boolean
+  default: false
+
+- name: runTestsInIsolation
+  type: boolean
+  default: false
+
+- name: codeCoverageEnabled
+  type: boolean
+  default: false
+
+- name: otherConsoleOptions
+  type: string
+  default: '/Platform:x64 -- RunConfiguration.DisableAppDomain=true'
+
+- name: vstestLocationMethod
+  type: string
+  default: 'version'
+
+- name: vstestLocation
+  type: string
+  default: '.'
+
+- name: vsTestVersion
+  type: string
+  default: 'latest'
+
+- name: runOnlyImpactedTests
+  type: boolean
+  default: false
+
+- name: uiTests
+  type: boolean
+  default: false
+
+- name: failOnMinTestsNotRun
+  type: boolean
+  default: false
+
+- name: diagnosticsEnabled
+  type: boolean
+  default: false
+
+- name: rerunFailedTests
+  type: boolean
+  default: false
+
+- name: publishRunAttachments
+  type: boolean
+  default: true
+
+- name: runSettingsFile
+  type: string
+  default: ''
+
+- name: overrideTestrunParameters
+  type: string
+  default: ''
+
+- name: pathtoCustomTestAdapters
+  type: string
+  default: ''
+
+  
+steps:
+# Visual Studio Test v2
+# Run unit and functional tests (Selenium, Appium, Coded UI test, etc.) using the Visual Studio Test (VsTest) runner. 
+- task: VSTest@2
+  displayName: Execute Unit Tests using VSTest
+  inputs:
+    testSelector: '${{ parameters.testSelector }}'
+    testAssemblyVer2: '${{ parameters.testAssemblyVer2 }}'
+    searchFolder: '${{ parameters.searchFolder }}'
+    testFiltercriteria: '${{ parameters.testFiltercriteria }}'
+    ${{ if parameters.resultsFolder }}:
+      resultsFolder: '${{ parameters.resultsFolder }}'
+    runInParallel: '${{ parameters.runInParallel }}'
+    runTestsInIsolation: '${{ parameters.runTestsInIsolation }}'
+    codeCoverageEnabled: '${{ parameters.codeCoverageEnabled }}'
+    otherConsoleOptions: '${{ parameters.otherConsoleOptions }}'
+    vstestLocationMethod: '${{ parameters.vstestLocationMethod }}'
+    ${{ if eq( parameters.vstestLocationMethod, 'version') }}:
+      vsTestVersion: '${{ parameters.vsTestVersion }}'
+    ${{ if eq( parameters.vstestLocationMethod, 'location') }}:
+      vstestLocation: '${{ parameters.vstestLocation }}'        
+    runOnlyImpactedTests: '${{ parameters.runOnlyImpactedTests }}'
+    uiTests: '${{ parameters.uiTests }}'
+    runSettingsFile: '${{ parameters.runSettingsFile }}'
+    overrideTestrunParameters: '${{ parameters.overrideTestrunParameters }}'
+    pathtoCustomTestAdapters: '${{ parameters.pathtoCustomTestAdapters }}'
+    failOnMinTestsNotRun: '${{ parameters.failOnMinTestsNotRun }}'
+    diagnosticsEnabled: '${{ parameters.diagnosticsEnabled }}'
+    rerunFailedTests: '${{ parameters.rerunFailedTests }}'
+    publishRunAttachments: '${{ parameters.publishRunAttachments }}'
